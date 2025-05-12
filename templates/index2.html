@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VITAL-GO AI Assistant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #e6f7ff;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    header {
+      background-color: #0077b6;
+      color: white;
+      padding: 20px 30px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    main {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: #023e8a;
+      color: white;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar li {
+      margin-bottom: 20px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .sidebar li:hover {
+      color: #90e0ef;
+    }
+
+    .chat-area {
+      flex: 1;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      padding: 30px;
+      overflow: hidden;
+    }
+
+    .chat-box {
+      flex: 1;
+      border: 2px solid #0077b6;
+      border-radius: 10px;
+      padding: 20px;
+      overflow-y: auto;
+      background-color: #f9fcff;
+      margin-bottom: 15px;
+      font-size: 1rem;
+    }
+
+    .chat-box p {
+      margin: 10px 0;
+    }
+
+    .input-section {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    #user-input {
+      flex: 1;
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 2px solid #0077b6;
+      font-size: 1rem;
+      outline: none;
+    }
+     .upload-label {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      background: #e0f3ff;
+      border: 2px dashed #0077b6;
+      border-radius: 10px;
+      padding: 10px 15px;
+      font-size: 0.95rem;
+      color: #0077b6;
+      transition: background 0.3s;
+    }
+
+    .upload-label:hover {
+      background: #caf0f8;
+    }
+
+    #upload {
+      display: none;
+    }
+
+
+    #send-btn {
+      padding: 12px 20px;
+      background: #0077b6;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    #send-btn:hover {
+      background: #023e8a;
+    }
+
+    .typing-indicator {
+      position: relative;
+      display: inline-block;
+      width: 80px;
+      height: 20px;
+      margin-top: 10px;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 5px;
+      background-color: #0077b6;
+      border-radius: 50%;
+      animation: typingAnimation 1.5s infinite;
+    }
+
+    .dot:nth-child(1) { animation-delay: 0s; }
+    .dot:nth-child(2) { animation-delay: 0.3s; }
+    .dot:nth-child(3) { animation-delay: 0.6s; }
+
+    @keyframes typingAnimation {
+      0% { transform: scale(0); opacity: 0.5; }
+      50% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(0); opacity: 0.5; }
+    }
+
+    @media (max-width: 768px) {
+      main {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 10px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>🩺 VITAL-GO AI Assistant</header>
+
+  <main>
+    <aside class="sidebar">
+      <ul>
+        <li><i class="fas fa-stethoscope"></i> Dashboard</li>
+        <li><i class="fas fa-comment-dots"></i> Chats</li>
+        <li><i class="fas fa-history"></i> Chat History</li>
+        <li><i class="fas fa-file-medical"></i> Uploads</li>
+      </ul>
+    </aside>
+
+    <section class="chat-area">
+      <div class="chat-box" id="chat-box"></div>
+
+      <div class="input-section">
+        <input type="text" id="user-input" placeholder="Type your message..." />
+        <label for="upload" class="upload-label">
+          <i class="fas fa-upload" style="margin-right: 6px;"></i> Upload
+        </label>
+        <input type="file" id="upload" />
+        <button id="send-btn" type="submit" onclick="sendMessage()">Send</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Intro message
+    window.onload = () => {
+      const chatBox = document.getElementById("chat-box");
+      const introMessage = `🩺 <strong>Welcome to VITAL-GO</strong> – your AI-powered gateway to smarter, more accessible healthcare.<br><br>
+        VITAL-GO is a comprehensive health platform built to empower <em>everyone</em>—from individuals monitoring their well-being to those seeking professional medical advice.<br><br>
+        Whether you're managing a condition, proactively tracking your health, or simply exploring wellness tools, VITAL-GO delivers real-time insights, wearable-integrated data, and intelligent guidance—<strong>Everywhere. Anywhere. Anytime.</strong><br><br>
+        I'm your virtual assistant—here to help you navigate the VITAL-GO ecosystem and connect you with the tools and experts you need for a healthier life.`;
+      chatBox.innerHTML += `<p><strong>AI:</strong> ${introMessage}</p>`;
+    };
+
+    //add enter key to submit
+    document.addEventListener("keydown", 
+    function(e){
+      if(e.key === "Enter"){
+        sendMessage();
+      }
+    });
+
+    // Send message function
+    async function sendMessage() {
+      const input = document.getElementById("user-input");
+      const message = input.value.trim();
+      if (!message) return;
+
+      const chatBox = document.getElementById("chat-box");
+      chatBox.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
+      input.value = "";
+
+      // Typing indicator
+      const typingIndicator = document.createElement("div");
+      typingIndicator.classList.add("typing-indicator");
+      typingIndicator.innerHTML = `
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      `;
+      chatBox.appendChild(typingIndicator);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      try {
+        const res = await fetch("/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message })
+        });
+
+        const data = await res.json();
+        typingIndicator.remove();
+        chatBox.innerHTML += `<p><strong>AI:</strong> ${data.response}</p>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      } catch (err) {
+        typingIndicator.remove();
+        chatBox.innerHTML += `<p><strong>AI:</strong> Error responding. Please try again later.</p>`;
+      }
+    }
+  </script>
+</body>
+</html>
