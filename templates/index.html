@@ -211,14 +211,16 @@
         gap: 5px;
       }
       ul{
+        width: 100%
         display: grid;
         grid-template-columns: repeat(1fr 1fr);
         grid-template-rows: repeat(1fr 1fr);
         column-gap: 10px;
       }
       ul li{
-        float: left;
         display: flex;
+        justify-content: space-even;
+        align-items: center;
       }
       .chat-box{
         width: 100%;
