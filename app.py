@@ -27,7 +27,7 @@ I'm proud to be part of their mission to make healthcare smarter, more accessibl
 
 developer_keywords = [
     "who made you", "who created you", "who built you", "who designed you",
-    "who coded you", "who programmed you", "who developed you", "who is your creator"
+    "who coded you", "who programmed you", "who developed you", "who build you", "who is your creator"
 ]
 
 # Flask app
