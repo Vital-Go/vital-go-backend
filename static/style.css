@@ -492,7 +492,7 @@ main {
         top: 0;
         left: 0;
         background: var(--cl-background);
-        height: 100vh;
+        height: 100dvh;
         width: 80vw;
         justify-content: center;
         align-items: center;
@@ -524,8 +524,9 @@ main {
     .aside1 {
         display: block;
         width: 10vw;
-        height: 100vh;
+        height: 100dvh;
         position: absolute;
+        box-shadow: var(--box-shadow);
         top: 0;
         left: 0;
         z-index: 99;
@@ -614,6 +615,8 @@ main {
     }
     .chat-area{
         padding: 0;
+        height: 100vdh;
+        position: relative;
     }
     .chat-box{
         padding: 0.3rem;
@@ -623,7 +626,10 @@ main {
     }
     .input-section{
         width: 80%;
+        position: absolute;
+        bottom: 5px;
         gap: 5px;
+
 
         #user-input {
             width: 70%;
