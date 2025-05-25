@@ -1,356 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>VITAL-GO AI Assistant</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #e6f7ff;
-      display: flex;
-      flex-direction: column;
-      height: 100dvh;
-      overflow: hidden;
-    }
-
-    header {
-      background-color: #0077b6;
-      color: white;
-      padding: 20px 30px;
-      font-size: 1.5rem;
-      font-weight: 600;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    main {
-      display: flex;
-      flex: 1;
-      overflow: hidden;
-    }
-
-    .sidebar {
-      width: 250px;
-      background-color: #023e8a;
-      color: white;
-      padding: 30px 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .sidebar ul {
-      list-style: none;
-    }
-
-    .sidebar li {
-      margin-bottom: 20px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-
-    .sidebar li:hover {
-      color: #90e0ef;
-    }
-
-    .chat-area {
-      flex: 1;
-      background: white;
-      display: flex;
-      flex-direction: column;
-      padding: 30px;
-      overflow: hidden;
-    }
-
-    .chat-box {
-      flex: 1;
-      border: 2px solid #0077b6;
-      border-radius: 10px;
-      padding: 20px;
-      overflow-y: auto;
-      background-color: #f9fcff;
-      margin-bottom: 15px;
-      font-size: 1rem;
-    }
-
-    .chat-box div {
-      word-wrap: break-word;
-      line-height: 1.6;
-      font-size: 1rem;
-    }
-
-    .chat-box h3, .chat-box h4 {
-      margin: 10px 0 6px;
-    }
-
-    .chat-box p {
-      margin: 0 0 10px;
-    }
-
-    .input-section {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-top: 10px;
-    }
-
-    #user-input {
-      flex: 1;
-      padding: 12px 15px;
-      border-radius: 10px;
-      border: 2px solid #0077b6;
-      font-size: 1rem;
-      outline: none;
-    }
-    /* Add to your <style> section */
-  .chat-message {
-    max-width: 100%;
-    padding: 12px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    word-wrap: break-word;
-  }
-
-  .chat-message.ai {
-    max-width: 70%;
-    background: #d7f0ff;
-    border-left: 4px solid #0077b6;
-    align-self: flex-start;
-    text-align: left;
-  }
-
-  .chat-message.user {
-    max-width: 60%;
-    margin-left: 40%;
-    background: #eef7ff;
-    border-right: 4px solid #90e0ef;
-    align-self: flex-end;
-    text-align: left;
-  }
-
-    .upload-label {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      background: #e0f3ff;
-      border: 2px dashed #0077b6;
-      border-radius: 10px;
-      padding: 10px 15px;
-      font-size: 0.95rem;
-      color: #0077b6;
-      transition: background 0.3s;
-    }
-
-    .upload-label:hover {
-      background: #caf0f8;
-    }
-
-    #upload {
-      display: none;
-    }
-
-    #send-btn {
-      padding: 12px 20px;
-      background: #0077b6;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    #send-btn:hover {
-      background: #023e8a;
-    }
-
-    .typing-indicator {
-      position: relative;
-      display: inline-block;
-      width: 80px;
-      height: 20px;
-      margin-top: 10px;
-    }
-
-    .dot {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      margin-right: 5px;
-      background-color: #0077b6;
-      border-radius: 50%;
-      animation: typingAnimation 1.5s infinite;
-    }
-
-    .dot:nth-child(1) { animation-delay: 0s; }
-    .dot:nth-child(2) { animation-delay: 0.3s; }
-    .dot:nth-child(3) { animation-delay: 0.6s; }
-
-    @keyframes typingAnimation {
-      0% { transform: scale(0); opacity: 0.5; }
-      50% { transform: scale(1); opacity: 1; }
-      100% { transform: scale(0); opacity: 0.5; }
-    }
-
-    @media (max-width: 768px) {
-      main {
-        flex-direction: column;
-      }
-
-      .sidebar {
-        width: 100%;
-        height: 75px;
-      }
-      ul{
-        display: grid;
-        width: 100%;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-        column-gap: 20px;
-      }
-      .chat-box{
-        width: 100%;
-      }
-      .upload-label{
-        width: 25px;
-        padding: 10px 3px;
-        span{
-          display: none;
-        }
-      }
-      #user-input{
-        width: 80%;
-        padding: 12px 5px;
-      }
-      #send-btn{
-        padding: 12px 5px;
-      }
-      
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="shortcut icon" href="../static/logo.jpg" type="image/jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12" defer></script>
+    <script src="../js/script.js" defer></script>
+    
+    <title>Vital-Go</title>
 </head>
 <body>
-  <header>🩺 VITAL-GO AI Assistant</header>
+    <!-- closes sidebar when the otherside of the screen is touched on mobile -->
+    <div id="close-sidebar" onclick="sidemenunone()"></div>
 
-  <main>
-    <aside class="sidebar">
-      <ul>
-        <li><i class="fas fa-stethoscope"></i> Dashboard</li>
-        <li><i class="fas fa-comment-dots"></i> Chats</li>
-        <li><i class="fas fa-history"></i> Chat History</li>
-        <li><i class="fas fa-file-medical"></i> Uploads</li>
-      </ul>
-    </aside>
+   <div class="container">
 
-    <section class="chat-area">
-      <div class="chat-box" id="chat-box"></div>
-
-      <div class="input-section">
-        <input type="text" id="user-input" placeholder="Type your message..." />
-        <div>
-          <label for="upload" class="upload-label">
-            <i class="fas fa-upload" style="margin-right: 6px;"></i> 
-            <span> Upload </span>
-          </label>
-          <input type="file" id="upload">
+    <!-- Sidebar -->
+    <nav id="sideBar">
+        <i class="fas fa-angles-left" onclick="sidemenunone()" id="close"></i>
+        <div class="vitalgo-id">
+            <img src="../static/logo.jpg" alt="Logo" class="logo">
+            <h1>Vital<span class="good">-Go</h1>
+            <h2 id="motto"></h2></span>
         </div>
-        <button id="send-btn" onclick="sendMessage()">Send</button>
-      </div>
-    </section>
-  </main>
+        <div class="linkpages">
+            <a href="../../Patient monitoring/html/index.html"><i class="fas fa-home"></i> <span class="linkname"> Dashboard</span></a>
+            <a href="../../Patient monitoring/html/appointments.html"><i class="fas fa-calendar"></i><span class="linkname">Appointments</span></a>
+            <a href="../../Patient monitoring/html/video-consult.html"><i class="fas fa-video"></i><span class="linkname">Video Consult</span></a>
+            <a href="../../Patient monitoring/html/medical-records.html"><i class="fas fa-notes-medical"></i><span class="linkname"> Medical Records</span></a>
+            <a href="../../Patient monitoring/html/reports.html"><i class="fas fa-file-waveform"></i><span class="linkname">Reports</span></a>
+            <a href="index.html"><i class="fas fa-question"></i><span class="linkname">Assistance</span></a>
+        </div>
+        <div class="nav-footer">
+            <div class="footer-info">
+                <a href=""> 
+                    <i class="fas fa-user"></i>
+                    <h3>Profile</h3>
+                </a>
+            </div>
+            <div class="footer-info">
+                <a href="">
+                    <i class="fas fa-gear"></i>
+                    <h3>Settings</h3>
+                </a> 
+            </div>
+            <div class="footer-info">
+                <a href="">
+                    <i class="fas fa-arrow-right-from-bracket"></i>
+                    <h3>Log Out</h3>
+                </a> 
+            </div>
+        </div>
+    </nav>
 
-  <script>
-     // Clean markdown and format output
-  function cleanAndFormatMarkdown(text) {
-    return text
-      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-      .replace(/\*(.*?)\*/g, "<em>$1</em>")
-      .replace(/### (.*?)\n/g, "<h4>$1</h4>")
-      .replace(/## (.*?)\n/g, "<h3>$1</h3>")
-      .replace(/^- (.*?)(?=<br>|<\/p>)/gm, "• $1")
-      .replace(/\n{2,}/g, "</p><p>")
-      .replace(/\n/g, "<br>");
-  }
+    <!--Main content -->
+    <main class="main-content">
+        <section class="header">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="search" placeholder="Search patients, doctors, reports...">
+            </div>
+            <div class="user-menu">
+                <img src="../static/lg1.jpg" alt="User" class="profile-photo">
+                <div>
+                    <h3>Asiedu Minta Kwaku</h3>
+                    <h4>ID: #Vital-Go24312</h4>
+                </div>
+                <div class="togglemenu">
+                    <i class="fas fa-sun active-mode" onclick="lightMode()"></i>
+                    <i class="fas fa-moon" onclick="darkMode()"></i>
+                </div>
+            </div>
+        </section>
 
-  // Intro message
-  window.onload = () => {
-    const chatBox = document.getElementById("chat-box");
-    const introMessage = `🩺 <strong>Welcome to VITAL-GO</strong> – your AI-powered gateway to smarter, more accessible healthcare.<br><br>
-      VITAL-GO is a comprehensive health platform built to empower <em>everyone</em>—from individuals monitoring their well-being to those seeking professional medical advice.<br><br>
-      Whether you're managing a condition, proactively tracking your health, or simply exploring wellness tools, VITAL-GO delivers real-time insights, wearable-integrated data, and intelligent guidance—<strong>Everywhere. Anywhere. Anytime.</strong><br><br>
-      I'm your virtual assistant—here to help you navigate the VITAL-GO ecosystem and connect you with the tools and experts you need for a healthier life.`;
+        <!-- dashboard -->
+        <section class="chat-area">
+            <h2 style="text-align: center;">Vital Go AI Assistant</h2>
+            <div class="chat-box" id="chat-box"></div>
+            <div class="input-section">
+                <input type="text" id="user-input" placeholder="Type your message..." />
+                <div>
+                <label for="upload" class="upload-label">
+                    <i class="fas fa-upload" style="margin-right: 6px;"></i> 
+                    <span> Upload </span>
+                </label>
+                <input type="file" id="upload">
+                </div>
+                <button id="send-btn" onclick="sendMessage()">Send</button>
+            </div>
+        </section>
+    </main>
+   </div>
 
-    const messageDiv = document.createElement("div");
-    messageDiv.className = "chat-message ai";
-    messageDiv.innerHTML = `<strong>AI:</strong><br><p>${introMessage}</p>`;
-    chatBox.appendChild(messageDiv);
-  };
-
-  // added Enter key to submit
-  document.addEventListener("keydown", 
-    function(e){
-      if(e.key === "Enter"){
-        sendMessage();
-      }
-    });
-
-  // Send message
-  async function sendMessage() {
-    const input = document.getElementById("user-input");
-    const message = input.value.trim();
-    if (!message) return;
-
-    const chatBox = document.getElementById("chat-box");
-
-    // User message
-    const userDiv = document.createElement("div");
-    userDiv.className = "chat-message user";
-    userDiv.innerHTML = `<strong>You:</strong><br><p>${message}</p>`;
-    chatBox.appendChild(userDiv);
-    input.value = "";
-
-    // Typing indicator
-    const typingIndicator = document.createElement("div");
-    typingIndicator.classList.add("typing-indicator");
-    typingIndicator.innerHTML = `
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>`;
-    chatBox.appendChild(typingIndicator);
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    try {
-      const res = await fetch("/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message })
-      });
-
-      const data = await res.json();
-      typingIndicator.remove();
-
-      const formatted = cleanAndFormatMarkdown(data.response);
-      const aiDiv = document.createElement("div");
-      aiDiv.className = "chat-message ai";
-      aiDiv.innerHTML = `<strong>AI:</strong><br><p>${formatted}</p>`;
-      chatBox.appendChild(aiDiv);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    } catch (err) {
-      typingIndicator.remove();
-      const errorDiv = document.createElement("div");
-      errorDiv.className = "chat-message ai";
-      errorDiv.innerHTML = `<strong>AI:</strong><br><p>Error responding. Please try again later.</p>`;
-      chatBox.appendChild(errorDiv);
-    }
-  }
-  </script>
+    <!-- Sidebar for mobile -->
+   <nav class="aside1" id="aside1">
+    <div class="menu-icon">
+        <i class="fas fa-angles-right open" id="open" onclick="sidemenushow()"></i>
+    </div>
+    <div class="linkpages1">
+        <a href="../../Patient monitoring/html/index.html"><i class="fas fa-home"></i></a>
+        <a href="../../Patient monitoring/html/appointments.html"><i class="fas fa-calendar"></i></a>
+        <a href="../../Patient monitoring/html/video-consult.html"><i class="fas fa-video"></i></a>
+        <a href="../../Patient monitoring/html/medical-records.html"><i class="fas fa-notes-medical"></i></a>
+        <a href="../../Patient monitoring/html/reports.html"><i class="fas fa-file-waveform"></i></a>
+        <a href="index.html"><i class="fas fa-question"></i></a>
+    </div>
+    <div class="aside-footer1">
+        <a href=""> <i class="fas fa-user"></i></a>      
+        <a href=""><i class="fas fa-gear"></i></a> 
+        <a href=""><i class="fas fa-arrow-right-from-bracket"></i>                
+    </div>
+</nav>
+<script src="../static/script.js"></script>
 </body>
 </html>
